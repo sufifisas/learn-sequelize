@@ -1,3 +1,6 @@
-require('dotenv').config();
+const { Sequelize } = require('sequelize');
+const dbConfig = require('./app/config/database.config');
 
-console.log(process.env.PORT)
+
+// connect database
+dbConfig(Sequelize);
