@@ -1,18 +1,9 @@
-const route = (app, models) => {
-    const User = models.User;
+const userController = require("../controllers/user.controller");
 
-    app.post('/users', async (req, res) => {
-        await User.create({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-        })
-        .then((data) => {
-            res.send(data);
-        })
-        .catch((error) => {
-            res.send(error?.message);
-        });
-    });
+const route = (app) => {
+
+    app.get('/users', userController.findAll);
+    app.post('/users', userController.create);
 };
 
 module.exports = route;

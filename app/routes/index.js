@@ -1,14 +1,14 @@
 const userRoutes = require('./user.route');
 const postRoutes = require('./post.route');
 
-const routes = (app, models) => {
+const routes = (app) => {
 
     app.get('/', (req, res) => {
         res.send('Hello Sequelize tutorial')
     })
 
-    userRoutes(app, models);
-    postRoutes(app, models);
+    userRoutes(app);
+    postRoutes(app);
 }
 
 module.exports = routes;

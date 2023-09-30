@@ -1,18 +1,9 @@
-const route = (app, models) => {
-    const Post = models.Post;
+const postController = require("../controllers/post.controller");
 
-    app.post('/posts', async (req, res) => {
-        await Post.create({
-            title: req.body.firstName,
-            description: req.body.lastName,
-        })
-        .then((data) => {
-            res.send(data);
-        })
-        .catch((error) => {
-            res.send(error?.message);
-        });
-    });
+const route = (app) => {
+
+    app.get('/posts', postController.findAll);
+    app.post('/posts', postController.create);
 };
 
 module.exports = route;

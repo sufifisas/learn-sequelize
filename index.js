@@ -26,7 +26,7 @@ sequelize.sync()
 });
 
 //import routes
-routes(app, sequelize.models);
+routes(app);
 
 app.listen(PORT, () => {
     console.log(`Server running at PORT ${PORT}`)
