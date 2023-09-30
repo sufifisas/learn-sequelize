@@ -1,4 +1,5 @@
 const userRoutes = require('./user.route');
+const postRoutes = require('./post.route');
 
 const routes = (app, models) => {
 
@@ -7,6 +8,7 @@ const routes = (app, models) => {
     })
 
     userRoutes(app, models);
+    postRoutes(app, models);
 }
 
 module.exports = routes;
