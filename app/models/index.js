@@ -1,13 +1,11 @@
-const userModel = require('./user.model');
+const { DataTypes } = require('sequelize');
+
+const sequelize = require('../config/database.config');
+const User = require('./user.model')(sequelize, DataTypes);
 
 //sync all the models
-module.exports = async (sequelize, DataTypes) => {
-    userModel(sequelize, DataTypes);
-    await sequelize.sync()
-    .then(() => {
-        console.log('Synced database')
-    })
-    .catch((error) => {
-        console.log(`Failed to sync database: ${error.message}`)
-    });
-};
+const models = () => {
+    User;
+}
+
+module.exports = models;

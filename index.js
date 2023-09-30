@@ -1,23 +1,32 @@
 require('dotenv').config();
 
-const { Sequelize, DataTypes } = require('sequelize');
-const dbConfig = require('./app/config/database.config');
+const express = require('express');
+
+const sequelize = require('./app/config/database.config')
 const models = require('./app/models');
 const routes = require('./app/routes');
-const express = require('express');
 
 const app = express();
 const PORT = process.env.PORT;
 
+// parse requests of content-type - application/json
+app.use(express.json());
 
-// connect database
-const sequelize = dbConfig(Sequelize);
+//define all models
+models();
 
-//define models
-models(sequelize, DataTypes);
+// synce all the models with database
+sequelize.sync()
+.then(() => {
+    console.log('Synced database')
+    console.log(sequelize.models, 'Available models')
+})
+.catch((error) => {
+    console.log(`Failed to sync database: ${error.message}`)
+});
 
 //import routes
-routes(app);
+routes(app, sequelize.models);
 
 app.listen(PORT, () => {
     console.log(`Server running at PORT ${PORT}`)
