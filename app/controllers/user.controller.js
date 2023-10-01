@@ -1,9 +1,18 @@
+const { Op } = require("sequelize");
 const sequelize = require("../config/database.config")
 
 const User = sequelize.models.User;
 
 exports.findAll = async (req, res) => {
-    await User.findAll()
+    const condition = {};
+    if (req.query.keyword) {
+        condition.firstName = {
+            [Op.like]: `%${req.query.keyword}%`, // use string% to start with, %string to end with
+        }
+    }
+    await User.findAll({
+        where: condition
+    })
     .then((data) => {
         res
         .status(200)

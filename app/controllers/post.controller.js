@@ -20,7 +20,7 @@ exports.create = async (req, res) => {
     await Post.create({
         title: req.body.title,
         description: req.body.description,
-    })
+    }, { fields: [title, description]}) // only allow title and description
     .then((data) => {
         res
         .status(200)
