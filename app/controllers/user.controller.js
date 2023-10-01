@@ -24,7 +24,7 @@ exports.findAll = async (req, res) => {
     .catch((error) => {
         res
         .status(500)
-        .send({ message: error.message });
+        .send({ message: error.errors ? error.errors[0].message : error.parent.sqlMessage });
     });
 };
 
@@ -41,7 +41,7 @@ exports.create = async (req, res) => {
     .catch((error) => {
         res
         .status(req.body.firstName ? 500 : 422)
-        .send({ message: error.message });
+        .send({ message: error.errors ? error.errors[0].message : error.parent.sqlMessage  });
     });
 }
 
@@ -55,7 +55,7 @@ exports.findOne = async (req, res) => {
     .catch((error) => {
         res
         .status(500)
-        .send({ message: error.message })
+        .send({ message: error.errors ? error.errors[0].message : error.parent.sqlMessage })
     })
 }
 
@@ -71,7 +71,7 @@ exports.update = async (req, res) => {
     .catch((error) => {
         res
         .status(500)
-        .send({ message: error.message })
+        .send({ message: error.errors ? error.errors[0].message : error.parent.sqlMessage })
     })
 }
 
@@ -87,6 +87,6 @@ exports.destroy = async (req, res) => {
     .catch((error) => {
         res
         .status(500)
-        .send({ message: error.message })
+        .send({ message: error.errors ? error.errors[0].message : error.parent.sqlMessage })
     })
 }
