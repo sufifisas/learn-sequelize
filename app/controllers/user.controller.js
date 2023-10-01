@@ -11,7 +11,10 @@ exports.findAll = async (req, res) => {
         }
     }
     await User.findAll({
-        where: condition
+        where: condition,
+        // order: [
+        //     ['firstName', 'DESC']
+        // ], <--- use order for sorting
     })
     .then((data) => {
         res
