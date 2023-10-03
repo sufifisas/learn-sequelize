@@ -32,7 +32,7 @@ exports.create = async (req, res) => {
     await User.create({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-    })
+    }, { fields: ['firstName', 'lastName']}) // only allow firstName and lastName
     .then((data) => {
         res
         .status(200)

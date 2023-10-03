@@ -1,9 +1,10 @@
+const { QueryTypes } = require("sequelize");
 const sequelize = require("../config/database.config")
 
 const Post = sequelize.models.Post;
 
 exports.findAll = async (req, res) => {
-    await Post.findAll()
+    await sequelize.query("SELECT * FROM `posts`", { type: QueryTypes.SELECT }) // <-- example for raw queries
     .then((data) => {
         res
         .status(200)
@@ -12,23 +13,38 @@ exports.findAll = async (req, res) => {
     .catch((error) => {
         res
         .status(500)
-        .send({ message: error.errors ? error.errors[0].message : error.parent.sqlMessage });
+        .send({ message: 'Internal server error.' });
     });
 };
 
 exports.create = async (req, res) => {
-    await Post.create({
-        title: req.body.title,
-        description: req.body.description,
-    }, { fields: [title, description]}) // only allow title and description
+    await sequelize.query(
+        "INSERT INTO `posts` (title, description, createdAt, updatedAt) VALUES (:title, :description, :createdAt, :updatedAt)",
+        {
+            type: QueryTypes.INSERT,
+            logging: console.log,
+            replacements: {
+                title: req.body.title,
+                description: req.body.description ?? null,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+            }
+        }
+    )
     .then((data) => {
         res
         .status(200)
-        .send(data);
+        .send({
+            id: data[0],
+            title: req.body.title,
+            description: req.body.description ?? null,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        });
     })
     .catch((error) => {
         res
-        .status(req.body.firstName ? 500 : 422)
-        .send({ message: error.errors ? error.errors[0].message : error.parent.sqlMessage });
+        .status(req.body.title ? 500 : 422)
+        .send({ message: error });
     });
 }
