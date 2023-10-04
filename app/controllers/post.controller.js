@@ -45,6 +45,24 @@ exports.create = async (req, res) => {
     .catch((error) => {
         res
         .status(req.body.title ? 500 : 422)
-        .send({ message: error });
+        .send({ message: req.body.title ? 'Internal server error.' : 'title is required' });
     });
+}
+
+exports.findOne = async (req, res) => {
+    const id = req.params.id;
+    await sequelize.query("SELECT * FROM `posts` WHERE id = :id", {
+        type: QueryTypes.SELECT,
+        replacements: { id: id }
+    })
+    .then((data) => {
+        res
+        .status(data ? 200 : 404)
+        .send(data[0] ?? 'user not exist')
+    })
+    .catch((error) => {
+        res
+        .status(500)
+        .send({ message: 'internal server error.' })
+    })
 }
